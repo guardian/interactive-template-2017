@@ -1,23 +1,26 @@
-const extractText = require('extract-text-webpack-plugin');
+import ExtractText from 'extract-text-webpack-plugin';
+import plugins from './config/plugins';
+
 const extractTextMain = new ExtractText({
 	filename: './styles/main.css',
 	allChunks: true
 });
 
 import { join } from 'path';
-const dist = join(__dirname, './dist');
-const plugins = require('./config/plugins');
+const dist = join(__dirname, './build');
+
+
 const exclude = /node_modules/;
 
 module.exports = env => {
 	const isProd = env && env.production;
 	return {
 		entry: {
-			main: './src/scripts/index.js'
+			app: './atoms/main/app.js'
 		},
 		output: {
 			path: dist,
-			filename: 'scripts/[name].js',
+			filename: './[name].js',
 			publicPath: '/'
 		},
 		module: {
@@ -39,8 +42,7 @@ module.exports = env => {
 		},
 		plugins: plugins(isProd, {
 			extractTextPlugin: {
-				main: extractTextMain,
-				vendors: extractTextVendors
+				main: extractTextMain
 			}
 		}),
 		devtool: 'source-map',
